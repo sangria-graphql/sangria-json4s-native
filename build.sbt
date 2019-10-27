@@ -1,6 +1,6 @@
 name := "sangria-json4s-native"
 organization := "org.sangria-graphql"
-version := "1.0.1-SNAPSHOT"
+mimaPreviousArtifacts := Set("org.sangria-graphql" %% "sangria-json4s-native" % "1.0.0")
 
 description := "Sangria json4s-native marshalling"
 homepage := Some(url("http://sangria-graphql.org"))
@@ -22,11 +22,9 @@ libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria-marshalling-api" % "1.0.4",
   "org.json4s" %% "json4s-native" % "3.5.5",
 
-  "org.sangria-graphql" %% "sangria-marshalling-testkit" % "1.0.2" % "test",
-  "org.scalatest" %% "scalatest" % "3.0.8" % "test"
+  "org.sangria-graphql" %% "sangria-marshalling-testkit" % "1.0.2" % Test,
+  "org.scalatest" %% "scalatest" % "3.0.8" % Test
 )
-
-git.remoteRepo := "git@github.com:sangria-graphql/sangria-json4s-native.git"
 
 // Publishing
 
@@ -41,9 +39,9 @@ publishTo := Some(
 
 // Site and docs
 
-site.settings
-site.includeScaladoc()
-ghpages.settings
+enablePlugins(SiteScaladocPlugin)
+enablePlugins(GhpagesPlugin)
+git.remoteRepo := "git@github.com:org.sangria-graphql-org/sangria-json4s-native.git"
 
 // nice *magenta* prompt!
 
@@ -54,9 +52,9 @@ shellPrompt in ThisBuild := { state =>
 // Additional meta-info
 
 startYear := Some(2016)
-organizationHomepage := Some(url("https://github.com/sangria-graphql"))
+organizationHomepage := Some(url("https://github.com/sangria-graphql-org"))
 developers := Developer("OlegIlyenko", "Oleg Ilyenko", "", url("https://github.com/OlegIlyenko")) :: Nil
 scmInfo := Some(ScmInfo(
-  browseUrl = url("https://github.com/sangria-graphql/sangria-json4s-native.git"),
-  connection = "scm:git:git@github.com:sangria-graphql/sangria-json4s-native.git"
+  browseUrl = url("https://github.com/sangria-graphql-org/sangria-json4s-native.git"),
+  connection = "scm:git:git@github.com:sangria-graphql-org/sangria-json4s-native.git"
 ))
