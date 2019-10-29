@@ -16,10 +16,10 @@ class Json4sNativeSupportSpec extends WordSpec with Matchers with MarshallingBeh
   }
 
   val toRender = JObject(
-    "a" → JArray(List(JNull, JInt(123), JArray(List(JObject("foo" → JString("bar")))))),
-    "b" → JObject(
-      "c" → JBool(true),
-      "d" → JNull))
+    "a" -> JArray(List(JNull, JInt(123), JArray(List(JObject("foo" -> JString("bar")))))),
+    "b" -> JObject(
+      "c" -> JBool(true),
+      "d" -> JNull))
 
   "InputUnmarshaller" should {
     "throw an exception on invalid scalar values" in {
