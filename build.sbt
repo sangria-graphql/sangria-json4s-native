@@ -1,6 +1,6 @@
 name := "sangria-json4s-native"
 organization := "org.sangria-graphql"
-mimaPreviousArtifacts := Set("org.sangria-graphql" %% "sangria-json4s-native" % "1.0.0")
+mimaPreviousArtifacts := Set("org.sangria-graphql" %% "sangria-json4s-native" % "1.0.1")
 
 description := "Sangria json4s-native marshalling"
 homepage := Some(url("http://sangria-graphql.org"))
