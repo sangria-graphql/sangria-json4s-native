@@ -1,13 +1,14 @@
 package sangria.marshalling
 
-import org.scalatest.{Matchers, WordSpec}
 
 import sangria.marshalling.json4s.native._
 import sangria.marshalling.testkit._
 
 import org.json4s.JsonAST._
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 
-class Json4sNativeSupportSpec extends WordSpec with Matchers with MarshallingBehaviour with InputHandlingBehaviour {
+class Json4sNativeSupportSpec extends AnyWordSpec with Matchers with MarshallingBehaviour with InputHandlingBehaviour {
   "Json4s native integration" should {
     behave like `value (un)marshaller` (Json4sNativeResultMarshaller)
 
