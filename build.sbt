@@ -19,7 +19,7 @@ libraryDependencies ++= Seq(
   "org.json4s" %% "json4s-native" % "3.6.10",
 
   "org.sangria-graphql" %% "sangria-marshalling-testkit" % "1.0.3" % Test,
-  "org.scalatest" %% "scalatest" % "3.2.4" % Test
+  "org.scalatest" %% "scalatest" % "3.2.5" % Test
 )
 
 // Publishing
