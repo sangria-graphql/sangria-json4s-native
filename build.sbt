@@ -6,8 +6,12 @@ description := "Sangria json4s-native marshalling"
 homepage := Some(url("http://sangria-graphql.org"))
 licenses := Seq("Apache License, ASL Version 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
 
-scalaVersion := "2.13.4"
-crossScalaVersions := Seq("2.12.12", scalaVersion.value)
+ThisBuild / crossScalaVersions := Seq("2.12.13", "2.13.5")
+ThisBuild / scalaVersion := crossScalaVersions.value.last
+ThisBuild / githubWorkflowPublishTargetBranches := List()
+ThisBuild / githubWorkflowBuildPreamble ++= List(
+  WorkflowStep.Sbt(List("mimaReportBinaryIssues"), name = Some("Check binary compatibility"))
+)
 
 scalacOptions ++= Seq("-deprecation", "-feature")
 
@@ -16,10 +20,10 @@ javacOptions ++= Seq("-source", "8", "-target", "8")
 
 libraryDependencies ++= Seq(
   "org.sangria-graphql" %% "sangria-marshalling-api" % "1.0.5",
-  "org.json4s" %% "json4s-native" % "3.6.10",
+  "org.json4s" %% "json4s-native" % "3.6.11",
 
   "org.sangria-graphql" %% "sangria-marshalling-testkit" % "1.0.3" % Test,
-  "org.scalatest" %% "scalatest" % "3.1.4" % Test
+  "org.scalatest" %% "scalatest" % "3.2.4" % Test
 )
 
 // Publishing
