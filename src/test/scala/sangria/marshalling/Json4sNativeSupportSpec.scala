@@ -1,6 +1,5 @@
 package sangria.marshalling
 
-
 import sangria.marshalling.json4s.native._
 import sangria.marshalling.testkit._
 
@@ -8,35 +7,37 @@ import org.json4s.JsonAST._
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-class Json4sNativeSupportSpec extends AnyWordSpec with Matchers with MarshallingBehaviour with InputHandlingBehaviour {
+class Json4sNativeSupportSpec
+    extends AnyWordSpec
+    with Matchers
+    with MarshallingBehaviour
+    with InputHandlingBehaviour {
   "Json4s native integration" should {
-    behave like `value (un)marshaller` (Json4sNativeResultMarshaller)
+    behave.like(`value (un)marshaller`(Json4sNativeResultMarshaller))
 
-    behave like `AST-based input unmarshaller` (json4sNativeFromInput[JValue])
-    behave like `AST-based input marshaller` (Json4sNativeResultMarshaller)
+    behave.like(`AST-based input unmarshaller`(json4sNativeFromInput[JValue]))
+    behave.like(`AST-based input marshaller`(Json4sNativeResultMarshaller))
   }
 
   val toRender = JObject(
     "a" -> JArray(List(JNull, JInt(123), JArray(List(JObject("foo" -> JString("bar")))))),
-    "b" -> JObject(
-      "c" -> JBool(true),
-      "d" -> JNull))
+    "b" -> JObject("c" -> JBool(true), "d" -> JNull))
 
   "InputUnmarshaller" should {
     "throw an exception on invalid scalar values" in {
-      an [IllegalStateException] should be thrownBy
-          Json4sNativeInputUnmarshaller.getScalarValue(JObject())
+      an[IllegalStateException] should be thrownBy
+        Json4sNativeInputUnmarshaller.getScalarValue(JObject())
     }
 
     "throw an exception on variable names" in {
-      an [IllegalArgumentException] should be thrownBy
-          Json4sNativeInputUnmarshaller.getVariableName(JString("$foo"))
+      an[IllegalArgumentException] should be thrownBy
+        Json4sNativeInputUnmarshaller.getVariableName(JString("$foo"))
     }
 
     "render JSON values" in {
       val rendered = Json4sNativeInputUnmarshaller.render(toRender)
 
-      rendered should be ("""{"a":[null,123,[{"foo":"bar"}]],"b":{"c":true,"d":null}}""")
+      rendered should be("""{"a":[null,123,[{"foo":"bar"}]],"b":{"c":true,"d":null}}""")
     }
   }
 
@@ -44,8 +45,7 @@ class Json4sNativeSupportSpec extends AnyWordSpec with Matchers with Marshalling
     "render pretty JSON values" in {
       val rendered = Json4sNativeResultMarshaller.renderPretty(toRender)
 
-      rendered.replaceAll("\r", "") should be (
-        """{
+      rendered.replaceAll("\r", "") should be("""{
           |  "a":[null,123,[{
           |    "foo":"bar"
           |  }]],
@@ -59,7 +59,7 @@ class Json4sNativeSupportSpec extends AnyWordSpec with Matchers with Marshalling
     "render compact JSON values" in {
       val rendered = Json4sNativeResultMarshaller.renderCompact(toRender)
 
-      rendered should be ("""{"a":[null,123,[{"foo":"bar"}]],"b":{"c":true,"d":null}}""")
+      rendered should be("""{"a":[null,123,[{"foo":"bar"}]],"b":{"c":true,"d":null}}""")
     }
   }
 }
