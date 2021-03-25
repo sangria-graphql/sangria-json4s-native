@@ -32,7 +32,7 @@ libraryDependencies ++= Seq(
 releaseCrossBuild := true
 releasePublishArtifactsAction := PgpKeys.publishSigned.value
 publishMavenStyle := true
-publishArtifact in Test := false
+Test / publishArtifact := false
 pomIncludeRepository := (_ => false)
 publishTo := Some(
   if (version.value.trim.endsWith("SNAPSHOT"))
@@ -47,13 +47,11 @@ enablePlugins(GhpagesPlugin)
 git.remoteRepo := "git@github.com:org.sangria-graphql/sangria-json4s-native.git"
 
 // nice *magenta* prompt!
-
-shellPrompt in ThisBuild := { state =>
+ThisBuild / shellPrompt := { state =>
   scala.Console.MAGENTA + Project.extract(state).currentRef.project + "> " + scala.Console.RESET
 }
 
 // Additional meta-info
-
 startYear := Some(2016)
 organizationHomepage := Some(url("https://github.com/sangria-graphql"))
 developers := Developer(
