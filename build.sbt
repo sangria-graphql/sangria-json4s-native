@@ -3,9 +3,9 @@ organization := "org.sangria-graphql"
 mimaPreviousArtifacts := Set("org.sangria-graphql" %% "sangria-json4s-native" % "1.0.1")
 
 description := "Sangria json4s-native marshalling"
-homepage := Some(url("http://sangria-graphql.org"))
+homepage := Some(url("https://sangria-graphql.github.io/"))
 licenses := Seq(
-  "Apache License, ASL Version 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
+  "Apache License, ASL Version 2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0"))
 
 ThisBuild / crossScalaVersions := Seq("2.12.13", "2.13.6")
 ThisBuild / scalaVersion := crossScalaVersions.value.last
@@ -16,8 +16,6 @@ ThisBuild / githubWorkflowBuildPreamble ++= List(
 )
 
 scalacOptions ++= Seq("-deprecation", "-feature")
-
-scalacOptions += "-target:jvm-1.8"
 javacOptions ++= Seq("-source", "8", "-target", "8")
 
 libraryDependencies ++= Seq(
