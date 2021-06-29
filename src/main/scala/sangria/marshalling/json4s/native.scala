@@ -10,20 +10,24 @@ object native extends Json4sNativeSupportLowPrioImplicits {
     type MapBuilder = ArrayMapBuilder[Node]
 
     def emptyMapNode(keys: Seq[String]) = new ArrayMapBuilder[Node](keys)
-    def addMapNodeElem(builder: MapBuilder, key: String, value: Node, optional: Boolean) =
+    def addMapNodeElem(
+        builder: MapBuilder,
+        key: String,
+        value: Node,
+        optional: Boolean): ArrayMapBuilder[Node] =
       builder.add(key, value)
 
     def mapNode(builder: MapBuilder) = JObject(builder.toList)
     def mapNode(keyValues: Seq[(String, JValue)]) = JObject(keyValues.toList)
 
     def arrayNode(values: Vector[JValue]) = JArray(values.toList)
-    def optionalArrayNodeValue(value: Option[JValue]) =
+    def optionalArrayNodeValue(value: Option[JValue]): Node =
       value match {
         case Some(v) => v
         case None => nullNode
       }
 
-    def scalarNode(value: Any, typeName: String, info: Set[ScalarValueInfo]) =
+    def scalarNode(value: Any, typeName: String, info: Set[ScalarValueInfo]): Node =
       value match {
         case v: String => JString(v)
         case v: Boolean => JBool(v)
@@ -38,30 +42,30 @@ object native extends Json4sNativeSupportLowPrioImplicits {
 
     def enumNode(value: String, typeName: String) = JString(value)
 
-    def nullNode = JNull
+    def nullNode: Node = JNull
 
-    def renderCompact(node: JValue) = compact(jsonRender(node))
-    def renderPretty(node: JValue) = pretty(jsonRender(node))
+    def renderCompact(node: JValue): String = compact(jsonRender(node))
+    def renderPretty(node: JValue): String = pretty(jsonRender(node))
   }
 
   implicit object Json4sNativeMarshallerForType extends ResultMarshallerForType[JValue] {
-    val marshaller = Json4sNativeResultMarshaller
+    val marshaller: Json4sNativeResultMarshaller.type = Json4sNativeResultMarshaller
   }
 
   implicit object Json4sNativeInputUnmarshaller extends InputUnmarshaller[JValue] {
     def getRootMapValue(node: JValue, key: String) =
       node.asInstanceOf[JObject].obj.find(_._1 == key).map(_._2)
 
-    def isMapNode(node: JValue) = node.isInstanceOf[JObject]
-    def getMapValue(node: JValue, key: String) =
+    def isMapNode(node: JValue): Boolean = node.isInstanceOf[JObject]
+    def getMapValue(node: JValue, key: String): Option[JValue] =
       node.asInstanceOf[JObject].obj.find(_._1 == key).map(_._2)
     def getMapKeys(node: JValue) = node.asInstanceOf[JObject].obj.map(_._1)
 
-    def isListNode(node: JValue) = node.isInstanceOf[JArray]
-    def getListValue(node: JValue) = node.asInstanceOf[JArray].arr
+    def isListNode(node: JValue): Boolean = node.isInstanceOf[JArray]
+    def getListValue(node: JValue): List[JValue] = node.asInstanceOf[JArray].arr
 
-    def isDefined(node: JValue) = node != JNull && node != JNothing
-    def getScalarValue(node: JValue) =
+    def isDefined(node: JValue): Boolean = node != JNull && node != JNothing
+    def getScalarValue(node: JValue): Any =
       node match {
         case JBool(b) => b
         case JInt(i) => i
@@ -72,33 +76,34 @@ object native extends Json4sNativeSupportLowPrioImplicits {
         case _ => throw new IllegalStateException(s"$node is not a scalar value")
       }
 
-    def getScalaScalarValue(node: JValue) = getScalarValue(node)
+    def getScalaScalarValue(node: JValue): Any = getScalarValue(node)
 
-    def isEnumNode(node: JValue) = node.isInstanceOf[JString]
+    def isEnumNode(node: JValue): Boolean = node.isInstanceOf[JString]
 
-    def isScalarNode(node: JValue) =
+    def isScalarNode(node: JValue): Boolean =
       node match {
-        case _: JBool | _: JNumber | _: JString => true
+        case _: JBool | _: JDouble | _: JDecimal | _: JLong | _: JInt | _: JString => true
         case _ => false
       }
 
-    def isVariableNode(node: JValue) = false
+    def isVariableNode(node: JValue): Boolean = false
     def getVariableName(node: JValue) =
       throw new IllegalArgumentException("variables are not supported")
 
-    def render(node: JValue) = compact(jsonRender(node))
+    def render(node: JValue): String = compact(jsonRender(node))
   }
 
   private object Json4sNativeToInput extends ToInput[JValue, JValue] {
-    def toInput(value: JValue) = (value, Json4sNativeInputUnmarshaller)
+    def toInput(value: JValue): (JValue, Json4sNativeInputUnmarshaller.type) =
+      (value, Json4sNativeInputUnmarshaller)
   }
 
   implicit def json4sNativeToInput[T <: JValue]: ToInput[T, JValue] =
     Json4sNativeToInput.asInstanceOf[ToInput[T, JValue]]
 
   private object Json4sNativeFromInput extends FromInput[JValue] {
-    val marshaller = Json4sNativeResultMarshaller
-    def fromResult(node: marshaller.Node) = node
+    val marshaller: Json4sNativeResultMarshaller.type = Json4sNativeResultMarshaller
+    def fromResult(node: marshaller.Node): JValue = node
   }
 
   implicit def json4sNativeFromInput[T <: JValue]: FromInput[T] =
@@ -106,6 +111,6 @@ object native extends Json4sNativeSupportLowPrioImplicits {
 }
 
 trait Json4sNativeSupportLowPrioImplicits {
-  implicit val Json4sNativeInputUnmarshallerJObject =
+  implicit val Json4sNativeInputUnmarshallerJObject: InputUnmarshaller[JObject] =
     native.Json4sNativeInputUnmarshaller.asInstanceOf[InputUnmarshaller[JObject]]
 }
