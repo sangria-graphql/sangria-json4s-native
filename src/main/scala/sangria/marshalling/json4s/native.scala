@@ -1,6 +1,6 @@
 package sangria.marshalling.json4s
 
-import org.json4s.native.JsonMethods.{render => jsonRender, pretty, compact}
+import org.json4s.native.JsonMethods.{compact, pretty, render => jsonRender}
 import org.json4s.JsonAST._
 import sangria.marshalling._
 
